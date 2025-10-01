@@ -1,0 +1,65 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$61FBoMnlFL4fZKadIWQUiK$SjmZQEsiwIbxNoR6JLiUz9EpBz1cNbROqxCdc/CMeKM=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-09-23T22:13:34Z",
+      "email": "user_1@habit.com",
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "telegram_chat_id": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$O7DcoipijeuRPAQGhl7fm8$QHCn54X24at+Y8a0RabyOk4IdIHNXxrizxSVc1PwOwE=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-09-28T15:38:05Z",
+      "email": "user_2@habit.com",
+      "phone": "+78884422777",
+      "city": "Челябинск",
+      "avatar": "",
+      "telegram_chat_id": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$k3l9z0viRgmPmj9NPkP5iA$hwmPsaeQW0YdEI2ZlgPXHWFmbWVfINShviKUGZck/X0=",
+      "last_login": "2025-10-01T03:11:59.001Z",
+      "is_superuser": true,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-10-01T03:11:07.709Z",
+      "email": "admin@habi.com",
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "telegram_chat_id": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
