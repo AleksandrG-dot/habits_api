@@ -149,7 +149,12 @@ SIMPLE_JWT = {
 
 # Настройки CORS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
+    'http://localhost:8000',  # Замените на адрес вашего фронтенд-сервера
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000', #  Замените на адрес вашего фронтенд-сервера
+    # и добавьте адрес бэкенд-сервера
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
@@ -164,6 +169,3 @@ CELERY_TIME_INTERVAL = 1  # Временной интервал запуска �
 
 # Настройки Telegram
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-
-# Coverage settings
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
