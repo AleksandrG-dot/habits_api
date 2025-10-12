@@ -167,5 +167,8 @@ CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # URL-адрес броке�
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')  # URL-адрес брокера результатов, также Redis
 CELERY_TIME_INTERVAL = 1  # Временной интервал запуска задач Celery (в минутах)
 
+# Использование Database Scheduler (без этого не работает контейнер beat)
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
 # Настройки Telegram
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
