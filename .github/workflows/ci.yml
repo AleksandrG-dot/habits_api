@@ -70,7 +70,7 @@ jobs:
           coverage run --source='.' manage.py test
           coverage report
 
-    # Сборка образа и отправка на Docker Hub проекта habits_api
+  # Сборка образа и отправка на Docker Hub проекта habits_api
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -83,13 +83,13 @@ jobs:
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/habits_api:${{ github.sha }} .
 
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/habits_api:${{ github.sha }}
 
 
-  # Деплой с Docker Hub проекта habits-api
+  # Деплой с Docker Hub проекта habits_api
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -103,8 +103,8 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker stop habits-api || true # останавливаем старый контейнер если он есть
-          docker rm habits-api || true # удаляем старый контейнер если он есть
-          # скачиваем и запускаем контейнер с указанием сети. В .env нужно указать IP-адрес контейнера PostgreSQL
-          docker run -d --name habits-api --env-file .env --network lms-drf_default -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }}
+          docker stop habits_api || true # останавливаем старый контейнер если он есть
+          docker rm habits_api || true # удаляем старый контейнер если он есть
+          # скачиваем и запускаем контейнер с указанием сети. В .env нужно указать IP-адрес контейнера PostgreSQL, а в команде ниже - сеть
+          docker run -d --name habits_api --env-file .env --network habits_api_default -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/habits_api:${{ github.sha }}
           EOF
