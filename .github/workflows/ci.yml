@@ -1,6 +1,9 @@
 name: Django CI/CD
 
 on: [push, pull_request]
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
 
 jobs:
   lint:
@@ -86,42 +89,44 @@ jobs:
           CELERY_RESULT_BACKEND: redis://localhost:6379/0
         run: |
           python manage.py test
+          coverage run --source='.' manage.py test
+          coverage report
 
-#    # Сборка образа и отправка на Docker Hub проекта habits_api
-#    build:
-#      needs: test
-#      runs-on: ubuntu-latest
-#
-#      steps:
-#        - name: Check out code
-#          uses: actions/checkout@v4
-#
-#        - name: Log in to Docker Hub
-#          run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-#
-#        - name: Build Docker image
-#          run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }} .
-#
-#        - name: Push Docker image to Docker Hub
-#          run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }}
-#
-#
-#    # Деплой с Docker Hub проекта habits-api
-#    deploy:
-#      needs: build
-#      runs-on: ubuntu-latest
-#
-#      steps:
-#        - name: Set up SSH
-#          uses: webfactory/ssh-agent@v0.9.0
-#          with:
-#            ssh-private-key: ${{ secrets.SSH_KEY }}
-#
-#        - name: Deploy to Server
-#          run: |
-#            ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#            docker stop habits-api || true # останавливаем старый контейнер если он есть
-#            docker rm habits-api || true # удаляем старый контейнер если он есть
-#            # скачиваем и запускаем контейнер с указанием сети. В .env нужно указать IP-адрес контейнера PostgreSQL
-#            docker run -d --name habits-api --env-file .env --network lms-drf_default -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }}
-#            EOF
+    # Сборка образа и отправка на Docker Hub проекта habits_api
+    build:
+      needs: test
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Check out code
+          uses: actions/checkout@v4
+
+        - name: Log in to Docker Hub
+          run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+        - name: Build Docker image
+          run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }} .
+
+        - name: Push Docker image to Docker Hub
+          run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }}
+
+
+    # Деплой с Docker Hub проекта habits-api
+    deploy:
+      needs: build
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Set up SSH
+          uses: webfactory/ssh-agent@v0.9.0
+          with:
+            ssh-private-key: ${{ secrets.SSH_KEY }}
+
+        - name: Deploy to Server
+          run: |
+            ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            docker stop habits-api || true # останавливаем старый контейнер если он есть
+            docker rm habits-api || true # удаляем старый контейнер если он есть
+            # скачиваем и запускаем контейнер с указанием сети. В .env нужно указать IP-адрес контейнера PostgreSQL
+            docker run -d --name habits-api --env-file .env --network lms-drf_default -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/habits-api:${{ github.sha }}
+            EOF
